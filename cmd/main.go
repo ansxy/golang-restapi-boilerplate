@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/ansxy/niaga-catering-be/cmd/app"
+	"github.com/ansxy/golang-boilerplate-gin/cmd/app"
 )
 
 func main() {

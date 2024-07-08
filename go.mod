@@ -1,4 +1,4 @@
-module github.com/ansxy/niaga-catering-be
+module github.com/ansxy/golang-boilerplate-gin
 
 go 1.22.0
 

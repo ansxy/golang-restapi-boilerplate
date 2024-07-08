@@ -37,11 +37,9 @@ func NewLogger(log *logrus.Logger) gin.HandlerFunc {
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 		c.Next()
 
-		// Prepare log entries
 		var requestPayload map[string]interface{}
 		json.Unmarshal(bodyBytes, &requestPayload)
 
-		// Convert response body to JSON for logging
 		var responsePayload map[string]interface{}
 		if err := json.Unmarshal(ww.Body.Bytes(), &responsePayload); err != nil {
 			log.WithError(err).Error("Failed to unmarshal response body")

@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	http_transport "github.com/ansxy/niaga-catering-be/internal/transport/http"
-	custome_http "github.com/ansxy/niaga-catering-be/pkg/http"
+	http_transport "github.com/ansxy/golang-boilerplate-gin/internal/transport/http"
+	custome_http "github.com/ansxy/golang-boilerplate-gin/pkg/http"
 )
 
 func Exec() (err error) {

@@ -1,7 +1,7 @@
 package custome_postgres
 
 import (
-	"github.com/ansxy/niaga-catering-be/config"
+	"github.com/ansxy/golang-boilerplate-gin/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

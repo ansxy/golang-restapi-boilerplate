@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/ansxy/niaga-catering-be/internal/repository"
+import "github.com/ansxy/golang-boilerplate-gin/internal/repository"
 
 type Usecase struct {
 	Repo repository.IFaceRepository

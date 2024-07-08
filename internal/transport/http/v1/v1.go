@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/ansxy/niaga-catering-be/internal/handler/public"
+	"github.com/ansxy/golang-boilerplate-gin/internal/handler/public"
 	"github.com/gin-gonic/gin"
 )
 
