@@ -7,6 +7,7 @@ import (
 
 func NewGinApp() *gin.Engine {
 	app := gin.Default()
+
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

@@ -1,10 +1,24 @@
 package app
 
-import custome_gin "github.com/ansxy/niaga-catering-be/pkg/gin"
+import (
+	"net/http"
+
+	http_transport "github.com/ansxy/niaga-catering-be/internal/transport/http"
+	custome_http "github.com/ansxy/niaga-catering-be/pkg/http"
+)
 
 func Exec() (err error) {
+	handler := http_transport.NewHttpTransport()
 
-	app := custome_gin.NewGinApp()
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: handler,
+	}
 
-	return app.Run(":8080")
+	err = custome_http.NewHttpServer(srv)
+	if err != nil {
+		return err
+	}
+
+	return
 }
