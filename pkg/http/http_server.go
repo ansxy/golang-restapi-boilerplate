@@ -1,41 +1,65 @@
-package custome_http
+package custom_http
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
+
+	"github.com/ansxy/golang-boilerplate-gin/config"
 )
 
-func NewHttpServer(server *http.Server) (err error) {
+func NewHttpServer(cnf *config.Config, handler http.Handler) (err error) {
+
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%v", cnf.App.Port),
+		Handler: handler,
+	}
+
+	serverCtx, ServerStopCtx := context.WithCancel(context.Background())
+
+	sig := make(chan os.Signal, 1)
+
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+
 	go func() {
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+		<-sig
+		log.Println("Gracefull Shutdownm")
+
+		shutdowCtx, cancel := context.WithTimeout(serverCtx, 30*time.Second)
+
+		go func() {
+			<-shutdowCtx.Done()
+
+			if shutdowCtx.Err() == context.DeadlineExceeded {
+				log.Printf("Graceful-shutdown-timeout \n%v\n ", err.Error())
+			}
+		}()
+
+		defer cancel()
+
+		err = srv.Shutdown(shutdowCtx)
+
+		if err != nil {
+			log.Printf("Gracefull-Shutdown-Error \n%v\n", err.Error())
 		}
+
+		ServerStopCtx()
 	}()
 
-	quit := make(chan os.Signal, 1)
+	log.Printf("Http-server-online: http://%v:%v", cnf.App.Host, cnf.App.Port)
 
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	log.Println("shutdown http server")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
-		log.Fatal("server Shutdown:", err)
+	err = srv.ListenAndServe()
+	if err != nil && err != http.ErrServerClosed {
+		log.Printf("Failed to start Http Server \n%v\n", err.Error())
+		return err
 	}
 
-	select {
-	case <-ctx.Done():
-		log.Println("shutdown http server success")
-	case <-time.After(time.Second * 5):
-		log.Println("shutdown http server timeout")
-	}
-
-	log.Println("exit")
+	<-serverCtx.Done()
 
 	return
 }

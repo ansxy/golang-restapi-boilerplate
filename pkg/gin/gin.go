@@ -1,4 +1,4 @@
-package custome_gin
+package custom_gin
 
 import (
 	"github.com/gin-contrib/cors"
