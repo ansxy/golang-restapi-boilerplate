@@ -59,7 +59,7 @@ air
 ```
 
 > Note if you are using Windows, you need to change the .air.toml file to use the correct path for the executable file.
-
+> Note gracefully shutdown doesnt work on hot reload AIR 
 
 
 <!-- ## Architecture
