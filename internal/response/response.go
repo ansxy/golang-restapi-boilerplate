@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+
+	custom_error "github.com/ansxy/golang-boilerplate-gin/pkg/error"
 )
 
 type JSONResponse struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data"`
-	Paging  *PaginatedResponse
-	Error   *JSONErrorResponse
+	Success bool               `json:"success"`
+	Data    interface{}        `json:"data"`
+	Paging  *PaginatedResponse `json:"paging"`
+	Error   *JSONErrorResponse `json:"error"`
 }
 
 type JSONErrorResponse struct {
@@ -55,8 +57,11 @@ func Pagination(w http.ResponseWriter, list interface{}, page int, perPage int, 
 
 }
 
-func Error(w http.ResponseWriter, code int, message string) {
+func Error(w http.ResponseWriter, err error) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(JSONResponse{Success: false, Error: &JSONErrorResponse{Code: code, Message: message}})
+	json.NewEncoder(w).Encode(JSONResponse{Success: false, Error: &JSONErrorResponse{
+		Code:    err.(*custom_error.CustomeError).ErrorContext.Code,
+		Message: err.(*custom_error.CustomeError).ErrorContext.Message,
+	}})
 }

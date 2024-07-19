@@ -1,4 +1,4 @@
-package costume_error
+package custom_error
 
 import "github.com/ansxy/golang-boilerplate-gin/pkg/constant"
 
